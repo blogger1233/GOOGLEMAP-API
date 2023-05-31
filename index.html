@@ -1,15 +1,14 @@
 <html>
 <head>
-  <meta property="og:title" content=MY FIRST PROJECT ON GOOGLE MAP API>
-<meta property="og:site_name" content="">
-<meta property="og:url" content="">
-<meta property="og:description" content="">
-<meta property="og:type" content="">
-<meta property="og:image" content="https://pbs.twimg.com/media/FxbzHFyaQAEk0-w?format=jpg&name=large">
+  <meta property="og:title" content="MY FIRST PROJECT ON GOOGLE MAP API">
+ 
+
+ 
+  <meta property="og:image" content="https://pbs.twimg.com/media/FxbzHFyaQAEk0-w?format=jpg&name=large">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Map</title>
+  
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
   <link rel="stylesheet" type="text/css" href="index.css" />
@@ -21,46 +20,56 @@
   <p>Click on the button to get your current location</p>
   <button onclick="getLocation()">Click me</button>
   <p id="demo"></p>
+  <div id="map"></div>
   <script>
     let map;
 
-async function initMap() {
-  const { Map } = await google.maps.importLibrary("maps");
-  map = new Map(document.getElementById("map"), {
-    center: { lat: -24.397, lng: 10.644 },
-    zoom: 8,
-  });
-}
-
-initMap();
-    var x = document.getElementById("demo");
-    var map;
+    async function initMap() {
+      const { Map } = await google.maps.importLibrary("maps");
+      map = new Map(document.getElementById("map"), {
+        center: { lat: -24.397, lng: 10.644 },
+        zoom: 8,
+      });
+    }
 
     function getLocation() {
+      var x = document.getElementById("demo");
+      var mapDiv = document.getElementById("map");
+
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            x.innerHTML =
+              "Latitude: " +
+              position.coords.latitude +
+              "<br>" +
+              "Longitude: " +
+              position.coords.longitude;
+            showLocationOnMap(position.coords.latitude, position.coords.longitude);
+          },
+          function (error) {
+            x.innerHTML = "Error retrieving location: " + error.message;
+          }
+        );
       } else {
         x.innerHTML = "Your browser does not support geolocation";
       }
     }
 
-    function showPosition(position) {
-      x.innerHTML = "Latitude: " + position.coords.latitude + "<br>" + "Longitude: " + position.coords.longitude;
-      showLocationOnMap(position.coords.latitude, position.coords.longitude);
-    }
-
     function showLocationOnMap(latitude, longitude) {
       const mapOptions = {
         center: { lat: latitude, lng: longitude },
-        zoom: 12
+        zoom: 12,
       };
       map = new google.maps.Map(document.getElementById("map"), mapOptions);
       new google.maps.Marker({
         position: { lat: latitude, lng: longitude },
-        map: map
+        map: map,
       });
     }
+
+    initMap();
   </script>
-  <div id="map"></div>
 </body>
 </html>
+
