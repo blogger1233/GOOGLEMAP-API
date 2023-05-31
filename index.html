@@ -1,0 +1,49 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Map</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <script type="text/javascript" src="index.js"></script>
+</head>
+<body>
+  <h2>My first project on Google Maps API</h2>
+  <hr>
+  <p>Click on the button to get your current location</p>
+  <button onclick="getLocation()">Click me</button>
+  <p id="demo"></p>
+  <script>
+    var x = document.getElementById("demo");
+    var map;
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        x.innerHTML = "Your browser does not support geolocation";
+      }
+    }
+
+    function showPosition(position) {
+      x.innerHTML = "Latitude: " + position.coords.latitude + "<br>" + "Longitude: " + position.coords.longitude;
+      showLocationOnMap(position.coords.latitude, position.coords.longitude);
+    }
+
+    function showLocationOnMap(latitude, longitude) {
+      const mapOptions = {
+        center: { lat: latitude, lng: longitude },
+        zoom: 12
+      };
+      map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      new google.maps.Marker({
+        position: { lat: latitude, lng: longitude },
+        map: map
+      });
+    }
+  </script>
+  <div id="map"></div>
+</body>
+</html>
